@@ -36,6 +36,7 @@ args = parser.parse_args()
 # Get list of entries from wayback machine based on search term      
 def getArchives(host, search):
     url = f"{WAYBACK_BASE_URL}/__wb/calendarcaptures/2?url={host}{search}&date={FROM_YEAR}"
+    print(url)
     thisYear = datetime.date.today().year
     combinedItems = {'items': []}
     print(f"[*] Getting list of {search} archives from {FROM_YEAR} onwards...")
@@ -163,9 +164,9 @@ def argWorker(host):
         else:
             print(f"[!] No {sTerm} data discovered\n")
     else:
-        if WRITE_CHECK != True:
-            filename = None
         pass
+    if WRITE_CHECK != True:
+        filename = None
     return filename
 
 if __name__ == '__main__':
