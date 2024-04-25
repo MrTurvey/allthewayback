@@ -1,4 +1,4 @@
-# allthewayback - Search the Wayback Machine for specific files
+# allthewayback - Search Wayback Machine for specific files
 ## What is this project? 
 
 allthewayback has been built to enable the quick discovery of specific historical files which may contain sensitive data. For example, you may search for old URL paths in archived robots.txt files or you may search for configuration data in archived .git or nginx.conf files. 
