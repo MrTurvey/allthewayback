@@ -31,7 +31,7 @@ python allthewayback.py <flags>
 ```
 
 ## Usage
-`allthewayback` will search a domain from the specified year(as set on [line 11](https://github.com/MrTurvey/allthewayback/blob/main/allthewayback.py#L11)) to the current year.
+`allthewayback` will search a domain from the specified year to the current year.
 
 The examples below search the Wayback Machine for bugbounty.com archived data from the years 2023 to 2024
 
