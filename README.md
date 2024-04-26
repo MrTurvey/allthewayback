@@ -2,9 +2,9 @@
 
 ## Overview
 
-`allthewayback` is designed to facilitate the discovery of specific historical files which may contain sensitive information. With this tool, you can search for old URL paths in archived robots.txt files, configuration data in archived `.git` or `nginx.conf` files, and more.
+`allthewayback` is designed to facilitate the discovery of specific historical files which may contain sensitive information. With this tool, you can search for old URL paths in archived `robots.txt` files, configuration data in archived `.git` or `nginx.conf` files, and more.
 
-This tool provides built-in flags for common sensitive files or allows you to specify your own search terms for the Wayback Machine. Any discovered files are output to a file of your choosing for further review.
+This tool provides built-in flags for common sensitive files or allows you to specify your own search terms for the [Wayback Machine](https://web.archive.org/). Any discovered files are output to a file of your choosing for further review.
 
 This project is maintained by [TurvSec](https://twitter.com/TurvSec).
 
@@ -14,7 +14,7 @@ This project is maintained by [TurvSec](https://twitter.com/TurvSec).
 
 ![allthewayback Output](/examples/ss1.png)
 
-**Sample File Output:**
+**Example File Output:**
 
 ![File Output](/examples/ss2.png)
 
