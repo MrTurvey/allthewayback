@@ -25,6 +25,7 @@ Simply git clone and you're away:
 ```
 git clone https://github.com/MrTurvey/allthewayback.git
 cd allthewayback
+pip3 install -r requirements.txt
 python allthewayback.py <flags>
 ```
 
