@@ -48,7 +48,7 @@ def getArchives(host, search):
 
     Arguments:
     host: target domain to be searched
-    search: value to be searched for"  
+    search: value to be searched for
     '''
     url = f"{WAYBACK_BASE_URL}/__wb/calendarcaptures/2?url={host}{search}&date={FROM_YEAR}"
     print(url)
