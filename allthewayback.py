@@ -17,26 +17,40 @@ WAIT_TIME = 5
 WRITE_CHECK = False
 
 # cmd arguments
-parser.add_argument("-d", dest="argDomain", metavar="url", required=True, help="Domain to search for (e.g google.com)")
-parser.add_argument("-o", dest="OUT_FILE", metavar="output file", required=True, help="Output file name")
-parser.add_argument("-y", dest="argFromYear", metavar="year", help="Year to start wayback searching from (Default: 2020)")
-parser.add_argument("-rl", dest="argRateLimit", metavar="seconds", help="Rate Limit in seconds (Default: 5)")
-parser.add_argument("-v", dest="verb", help="Display URLs as they are discovered (Default: False)", action='store_true')
-parser.add_argument("-R", dest="robots", help="Search for robots.txt files", action='store_true')
-parser.add_argument("-G", dest="git", help="Search for .git files", action='store_true')
-parser.add_argument("-C", dest="config", help="Search for config files", action='store_true')
-parser.add_argument("-S", dest="sitemap", help="Search for sitemap files", action='store_true')
-parser.add_argument("-H", dest="htaccess", help="Search for htaccess files", action='store_true')
-parser.add_argument("-Wc", dest="wconf", help="Search for web.config files", action='store_true')
-parser.add_argument("-Wx", dest="wxml", help="Search for WEB-INF/web.xml files", action='store_true')
-parser.add_argument("-N", dest="nginx", help="Search for Nginx config", action='store_true')
-parser.add_argument("-OF", dest="ownFile", metavar="file name", help="Specify your own file to search for (e.g /test.php)")
-args = parser.parse_args()
+def setup_arg_parser():
+    '''
+    Sets up and configures the argument parser for the command-line interface.
+
+    Returns:
+    ArgumentParser: The configured argument parser.
+    '''
+    parser = argparse.ArgumentParser(prog='allthewayback', description='Search the WayBackMachine for sensitive data')
+    parser.add_argument("-d", dest="argDomain", metavar="url", required=True, help="Domain to search for (e.g google.com)")
+    parser.add_argument("-o", dest="OUT_FILE", metavar="output file", required=True, help="Output file name")
+    parser.add_argument("-y", dest="argFromYear", metavar="year", help="Year to start wayback searching from (Default: 2020)")
+    parser.add_argument("-rl", dest="argRateLimit", metavar="seconds", help="Rate Limit in seconds (Default: 5)")
+    parser.add_argument("-v", dest="verb", help="Display URLs as they are discovered (Default: False)", action='store_true')
+    parser.add_argument("-R", dest="robots", help="Search for robots.txt files", action='store_true')
+    parser.add_argument("-G", dest="git", help="Search for .git files", action='store_true')
+    parser.add_argument("-C", dest="config", help="Search for config files", action='store_true')
+    parser.add_argument("-S", dest="sitemap", help="Search for sitemap files", action='store_true')
+    parser.add_argument("-H", dest="htaccess", help="Search for htaccess files", action='store_true')
+    parser.add_argument("-Wc", dest="wconf", help="Search for web.config files", action='store_true')
+    parser.add_argument("-Wx", dest="wxml", help="Search for WEB-INF/web.xml files", action='store_true')
+    parser.add_argument("-N", dest="nginx", help="Search for Nginx config", action='store_true')
+    parser.add_argument("-OF", dest="ownFile", metavar="file name", help="Specify your own file to search for (e.g /test.php)")
+    return parser
 
 # Get list of entries from wayback machine based on search term      
 def getArchives(host, search):
+    '''
+    Parses the host and search query and directs requests against API
+
+    Arguments:
+    host: target domain to be searched
+    search: value to be searched for
+    '''
     url = f"{WAYBACK_BASE_URL}/__wb/calendarcaptures/2?url={host}{search}&date={FROM_YEAR}"
-    print(url)
     thisYear = datetime.date.today().year
     combinedItems = {'items': []}
     print(f"[*] Getting list of {search} archives from {FROM_YEAR} onwards...")
@@ -58,7 +72,7 @@ def getArchives(host, search):
         else:
             robotArchives = unpackArchives(combinedItems)
             if  len(robotArchives['items']) != 0:
-                print(f'\n[+] Found {len(robotArchives['items'])} results dating back to {FROM_YEAR}')
+                print(f"\n[+] Found {len(robotArchives['items'])} results dating back to {FROM_YEAR}")
                 url_list = []
                 for archive in robotArchives['items']:
                     url = f'{WAYBACK_BASE_URL}/web/{FROM_YEAR}0{archive[0]}/{host}{search}'
@@ -67,13 +81,27 @@ def getArchives(host, search):
             else:
                 return []        
 
-# Remove any unnecessary wayback data, such as anything that isnt HTTP 200
 def unpackArchives(archives):
+    '''
+    Filters out unwanted data from waybackmachine, specifically ensuring only HTTP 200 status codes are included.
+    
+    Arguments:
+    archives: dict - Contains archive entries potentially including statuses other than HTTP 200.
+    
+    Returns:
+    dict - Filtered archive data with entries that only include HTTP 200 status codes.
+    '''
     filtered_data = {'items': [item[:-1] for item in archives['items'] if item[1] in (200, '-')]}
     return filtered_data
 
-# Check cmd arguments and return the host to work with
+
 def initalise():  
+    '''
+    Initializes and validates command-line arguments, sets global configurations.
+    
+    Returns:
+    str - The validated host domain to be used for archive searches.
+    '''
     if args.argFromYear:
         global FROM_YEAR 
         FROM_YEAR = args.argFromYear
@@ -87,12 +115,21 @@ def initalise():
         print("Please enter a domain without a protocol: google.com and not https://google.com")
         sys.exit()
     else:
-        # Store the host to be checked
         host = args.argDomain
     return host
 
-# Handle the file writing
+
 def fileWrite(writeData):
+    '''
+    Writes data to an output file specified by the OUT_FILE global variable. Data is appended if the file
+    already exists, or a new file is created otherwise. Verbose output is shown if enabled.
+
+    Arguments:
+    writeData: list or str - The data to write. If a list, it will be joined by newlines.
+
+    Returns:
+    str - The path to the output file where the data was written.
+    '''
     mode = 'a' if os.path.exists(OUT_FILE) else 'w'
     global WRITE_CHECK
     WRITE_CHECK = True
@@ -105,8 +142,18 @@ def fileWrite(writeData):
         print(f" {writeData} \n")
     return OUT_FILE
 
-# Run through the searches based on provided flags
+
 def argWorker(host):
+    '''
+    Processes various command-line flags to perform archive searches and writes found URLs to a file.
+    Logs messages when specific file types are not found in the archives.
+
+    Arguments:
+    host: str - The domain name to search archives for.
+
+    Returns:
+    str or None - The filename where URLs were written, or None if no data was written.
+    '''
     if args.robots:
         robotUrls = getArchives(host, '/robots.txt')
         if robotUrls:
@@ -170,6 +217,10 @@ def argWorker(host):
     return filename
 
 if __name__ == '__main__':
+    parser = setup_arg_parser()
+    args = parser.parse_args()
+    
+    
     # Check command, initalise params and return host to be checked 
     host = initalise()
     
