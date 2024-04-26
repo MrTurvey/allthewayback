@@ -1,27 +1,28 @@
-# Search the Wayback Machine for specific/sensitive files
-## What is this project? 
+# Search the Wayback Machine for Sensitive Files
 
-allthewayback has been built to enable the quick discovery of specific historical files which may contain sensitive data. For example, you may search for old URL paths in archived robots.txt files or you may search for configuration data in archived .git or nginx.conf files. 
+## Overview
 
-You can either use the built in flags to find common sensitive files or you can specify your own wayback search term.
+`allthewayback` is designed to facilitate the discovery of specific historical files which may contain sensitive information. With this tool, you can search for old URL paths in archived `robots.txt` files, configuration data in archived `.git` or `nginx.conf` files, and more.
 
-Any discovered archived files will be output into a file of your choosing for self review.
+This tool provides built-in flags for common sensitive files or allows you to specify your own search terms for the [Wayback Machine](https://web.archive.org/). Any discovered files are output to a file of your choosing for further review.
 
-This project is maintained by [TurvSec](https://twitter.com/TurvSec)
+This project is maintained by [TurvSec](https://twitter.com/TurvSec).
 
-## Output Example 
-Here's what you will see when running allthewayback:
+## Output Example
 
-![Alt text](/examples/ss1.png "allthewayback Output")
+**Console Output Example:**
 
-Here's what your output file will look like:
+![allthewayback Output](/examples/ss1.png)
 
-![Alt text](/examples/ss2.png "File Output")
+**Example File Output:**
 
-You can then use the output URLs to search for any sensitive data.
+![File Output](/examples/ss2.png)
+
+Using the output URLs, you can review and analyze any sensitive data that might be present.
 
 ## Installation
-Simply git clone and you're away:
+
+Clone the repository and set up the environment:
 ```
 git clone https://github.com/MrTurvey/allthewayback.git
 cd allthewayback
@@ -30,25 +31,25 @@ python allthewayback.py <flags>
 ```
 
 ## Usage
-allthewayback will search a domain from the specified year to the current year.
+`allthewayback` will search a domain from the specified year to the current year.
 
 The examples below search the Wayback Machine for bugbounty.com archived data from the years 2023 to 2024
 
-<b>To run all built in checks (-RGCSHN -Wc -Wx) and show any URLs as they are found (-v):</b>
+**To run all built in checks (-RGCSHN -Wc -Wx) and show any URLs as they are found (-v):**
 ```
 python allthewayback.py -y <year> -d <domain> -RGCSHN -Wc -Wx -o <outfile> -v
 
 python allthewayback.py -y 2023 -d bugbounty.com -RGCSHN -Wc -Wx -o bountyoutput.txt -v
 ```
 
-<b>To run a single check using your own search term (-OF) and show URLs as they are found (-v):</b>
+**To run a single check using your own search term (-OF) and show URLs as they are found (-v):**
 ```
 python allthewayback.py -y <year> -d <domain> -OF <SearchTerm> -o <outfile> -v
 
 python allthewayback.py -y 2023 -d bugbounty.com -OF test.php -o bountyoutput.txt -v
 ```
 
-<b>From the help:</b>
+**From the help:**
 
 ```
 usage: allthewayback [-h] -d url -o output file [-y year] [-rl seconds] [-v] [-R] [-G] [-C] [-S] [-H] [-Wc] [-Wx] [-N] [-OF file name]
