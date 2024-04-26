@@ -51,7 +51,6 @@ def getArchives(host, search):
     search: value to be searched for
     '''
     url = f"{WAYBACK_BASE_URL}/__wb/calendarcaptures/2?url={host}{search}&date={FROM_YEAR}"
-    print(url)
     thisYear = datetime.date.today().year
     combinedItems = {'items': []}
     print(f"[*] Getting list of {search} archives from {FROM_YEAR} onwards...")
@@ -220,6 +219,7 @@ def argWorker(host):
 if __name__ == '__main__':
     parser = setup_arg_parser()
     args = parser.parse_args()
+    
     
     # Check command, initalise params and return host to be checked 
     host = initalise()
