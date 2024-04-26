@@ -58,7 +58,7 @@ def getArchives(host, search):
         else:
             robotArchives = unpackArchives(combinedItems)
             if  len(robotArchives['items']) != 0:
-                print(f'\n[+] Found {len(robotArchives['items'])} results dating back to {FROM_YEAR}')
+                print(f"\n[+] Found {len(robotArchives['items'])} results dating back to {FROM_YEAR}")
                 url_list = []
                 for archive in robotArchives['items']:
                     url = f'{WAYBACK_BASE_URL}/web/{FROM_YEAR}0{archive[0]}/{host}{search}'
